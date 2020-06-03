@@ -89,3 +89,16 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// check and pass arguments to kernel mode
+// return status of passing arguments to kernel mode
+int
+sys_ps(void)
+{
+  struct proc_info **p;
+  int *n;
+  if(argptr(0, (void*)&p, sizeof(*p))<0 || argptr(1, (void*)&n, sizeof(*n))<0)
+    return -1;
+  ps(p,n);
+  return 0;
+}
