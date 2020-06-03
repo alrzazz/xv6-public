@@ -532,3 +532,26 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+
+// ps syscall find RUNNING and RUNNABLE processes
+// pt is information about processes
+// count is number of processes
+void ps(struct proc_info ** pt,int *count)
+{
+  acquire(&ptable.lock);
+  struct proc * p;
+  int process_count = 0;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if(p->state == RUNNING || p->state == RUNNABLE)
+    {
+      ((*pt) + process_count)->pid = p->pid;
+      ((*pt) + process_count)->memsize = p->sz;
+      process_count++;
+    }
+  }
+  release(&ptable.lock);
+  *count = process_count;
+  return ;
+}
