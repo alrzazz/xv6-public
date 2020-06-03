@@ -26,7 +26,8 @@ SECTIONS
 		PROVIDE(__STAB_BEGIN__ = .);
 		*(.stab);
 		PROVIDE(__STAB_END__ = .);
-		BYTE(0)		/* Force the linker to allocate space
+		BYTE(0)	 /* for should comment this line because qemu stuck in booting from hard disk */	
+		/* Force the linker to allocate space
 				   for this section */
 	}
 
@@ -34,7 +35,8 @@ SECTIONS
 		PROVIDE(__STABSTR_BEGIN__ = .);
 		*(.stabstr);
 		PROVIDE(__STABSTR_END__ = .);
-		BYTE(0)		/* Force the linker to allocate space
+		BYTE(0)	/* for should comment this line because qemu stuck in booting from hard disk */	
+		/* Force the linker to allocate space
 				   for this section */
 	}
 
