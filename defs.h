@@ -124,6 +124,8 @@ void            yield(void);
 void			ps(struct proc_info **,int *);
 int             waitx(int *wtime , int *rtime);
 int 			set_priority(int prio);
+void			psinfo(void);
+
 // swtch.S
 void            swtch(struct context**, struct context*);
 
