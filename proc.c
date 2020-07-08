@@ -343,9 +343,9 @@ scheduler(void)
           highP = p;
       }
     }
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
+    // Switch to chosen process.  It is the process's job
+    // to release ptable.lock and then reacquire it
+    // before jumping back to us.
     if(highP->state == RUNNABLE){
       c->proc = highP;
       switchuvm(highP);
@@ -622,5 +622,27 @@ int set_priority(int prio){
     yield();
   }
   return prev_prio;
+}
+
+void psinfo()
+  {
+  struct proc *p;
+  // Enable interrupts on this processor.
+  sti();
+  // Loop over process table looking for process with pid.
+  acquire(&ptable.lock);
+  cprintf("pid    priority    state \n");
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if ( p->state == SLEEPING )
+        cprintf("%d    %d    SLEEPING \n ", p->pid, p->priority );
+      else if ( p->state == RUNNING )
+        cprintf("%d    %d    RUNNING \n ", p->pid, p->priority );
+      else if ( p->state == RUNNABLE )
+        cprintf("%d    %d    RUNNABLE \n ", p->pid, p->priority );
+      else if ( p->state == ZOMBIE )
+        cprintf("%d    %d    ZOMBIE \n ", p->pid, p->priority );
+  }
+  release(&ptable.lock);
+  return ;
 }
 

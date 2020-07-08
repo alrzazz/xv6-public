@@ -121,3 +121,9 @@ sys_set_priority(void)
     return -1;
   return set_priority(prio);
 }
+
+void
+sys_psinfo(void)
+{
+  return psinfo();
+} 
