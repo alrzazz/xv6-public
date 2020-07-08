@@ -102,3 +102,13 @@ sys_ps(void)
   ps(p,n);
   return 0;
 }
+
+int
+sys_waitx(void)
+{
+  int *wtime;
+  int *rtime;
+  if(argptr(1, (void*)&rtime, sizeof(*rtime))<0 || argptr(0, (void*)&wtime, sizeof(*wtime))<0)
+    return -1;
+  return waitx(wtime,rtime);
+}
