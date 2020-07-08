@@ -25,6 +25,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int ps(struct proc_info **,int *);
+int waitx(int *wtime , int *rtime);
 
 // ulib.c
 int stat(const char*, struct stat*);
