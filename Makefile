@@ -183,6 +183,7 @@ UPROGS=\
 	_zombie\
 	_pstest\
 	_waitx_test\
+	_set_priority_test\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -256,7 +257,8 @@ EXTRA=\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 	pstest.c\
-	waitx_test
+	waitx_test\
+	set_priority_test\
 
 dist:
 	rm -rf dist
