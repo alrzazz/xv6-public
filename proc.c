@@ -115,6 +115,7 @@ found:
   p->rtime = 0;
   p->iotime = 0;
   p->etime = 0;
+  p->priority = 50;
   return p;
 }
 
@@ -333,21 +334,24 @@ scheduler(void)
   for(;;){
     // Enable interrupts on this processor.
     sti();
-
+    struct proc *highP = ptable.proc;
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
-
+      if(p->state == RUNNABLE){
+        if ( highP->priority >= p->priority )
+          highP = p;
+      }
+    }
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
+    if(highP->state == RUNNABLE){
+      c->proc = highP;
+      switchuvm(highP);
+      highP->state = RUNNING;
 
-      swtch(&(c->scheduler), p->context);
+      swtch(&(c->scheduler), highP->context);
       switchkvm();
 
       // Process is done running for now.
@@ -607,3 +611,16 @@ int waitx(int *wtime,int *rtime)
     sleep(curproc, &ptable.lock);  //DOC: wait-sleep
   }
 }
+
+int set_priority(int prio){
+  acquire(&ptable.lock);
+  int prev_prio = myproc()->priority;
+  myproc()->priority = prio;
+  release(&ptable.lock);
+  if(prio<prev_prio)
+  {
+    yield();
+  }
+  return prev_prio;
+}
+
